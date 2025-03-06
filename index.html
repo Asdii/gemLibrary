@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-W5M3371BPS"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-W5M3371BPS');
+	</script>
+	<title>JH Facetados</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+
+		::-webkit-scrollbar {
+			width: 0.5em;
+			height: 0.5em
+		}
+		::-webkit-scrollbar-button {
+			background: #ccc
+		}
+		::-webkit-scrollbar-track-piece {
+			background: #888
+		}
+		::-webkit-scrollbar-thumb {
+			background: #eee
+		}
+
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		.controls {
+			flex: 0 0 auto;
+			max-height: 90vh;
+			overflow-y: auto;
+			flex-direction: column;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 250px;
+			padding: 20px;
+			background-color: rgba(255, 255, 255);
+			box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+			z-index: 10;
+			border: none;
+            border-bottom-right-radius: 8px;
+			
+			transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+		}
+
+		canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+		}
+
+		@media (max-width: 950px) {
+			.controls {
+				flex: 0 0 auto;
+				flex-direction: column;
+				width: 50%;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: auto;
+				border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+			}
+
+			#container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				background-color: #fff;
+				padding: 10px;
+				overflow: hidden;
+				height: 90%;
+            }
+
+            .select {
+                margin-bottom: 10px;
+            }
+
+            .modelImageDiv {
+                margin-right: 5px;
+            }
+
+			canvas {
+				top: 50px;
+			}
+		}
+
+		select {
+			width: 100%;
+			height: 100%;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			-ms-appearance: none;
+			appearance: none;
+			outline: 0;
+			box-shadow: none;
+			border: 0 !important;
+			background: #5c6664;
+			background-image: none;
+			flex: 1;
+			padding: 0 .5em;
+			color: #fff;
+			cursor: pointer;
+			font-size: 1em;
+		}
+
+		select::-ms-expand {
+			display: none;
+		}
+
+		.select {
+			position: relative;
+			display: table-cell;
+			width: 20em;
+			height: 3em;
+			line-height: 3;
+			background: #5c6664;
+			overflow: hidden;
+			border-radius: .25em;
+			padding-right: 10px
+		}
+
+		.select::after {
+			content: '\25BC';
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 0 1em;
+			background: #2b2e2e;
+			cursor: pointer;
+			pointer-events: none;
+			transition: .25s all ease;
+		}
+
+		.select:hover::after {
+			color: #23b499;
+		}
+
+		#downloadASCButton {
+			height: 30px;
+			margin-bottom: 10px;
+			width: -webkit-fill-available;
+		}
+
+		#downloadGLBButton {
+			height: 30px;
+			width: -webkit-fill-available;
+		}
+
+		#selectContainer {
+			padding: 10px
+		}
+
+		#imageScrollContainer {
+			height: 60%;
+			flex-direction: column;
+            width: 100%;
+            margin: 10px 0;
+			display: flex;
+        }
+        #imageScrollContainer img {
+            cursor: pointer;
+            max-height: 100px;
+        }
+
+		.modelImageDiv {
+			margin-bottom:10px;
+			display:contents;
+			border: #000000 6px outset;
+			flex: 0 0 auto;
+            margin-right: 10px;
+		}
+
+		#toggleButton {
+			transition: opacity 400ms;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #5c6664;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media (max-width: 950px) {
+            #toggleButton {
+                display: block;
+            }
+        }
+
+		#controls-container.minimized {
+            height: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+		}
+
+		#controls-div {
+			height: 100%;
+		}
+
+		#info-container {
+			transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+			opacity: 85%;
+			font-size: small;
+            position: fixed; 
+            bottom: 20px;
+            right: 20px;
+            width: 25%;
+            padding: 10px;
+            background-color: white; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid #ddd;
+			z-index: 999;
+        }
+
+		#info-container.minimized {
+            height: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+		}
+
+		#info-container h4{
+			text-align: center;
+        }
+
+		#info-container p{
+			font-weight: bold;
+        }
+
+		#info-container span{
+			font-weight: normal;
+        }
+
+		.divider {
+			height: 5px;
+			display: flex;
+			
+			&:before,
+			&:after {
+				content: "";
+				flex: 1;
+			}
+		}
+
+		.line {
+			align-items: center;
+			margin: 1em -1em;
+			
+			&:before,
+			&:after {
+				height: 1px;
+				margin: 0 1em;
+			}
+		}
+
+		.double-razor {
+			&:before,
+			&:after {
+			height: 3px;
+			box-shadow:
+				0 -0.5px 0 black,
+				0 0.5px 0 black;
+			border-width: 0;
+			}
+		}
+
+		.spanNombre{
+			text-align: center;
+		}
+
+		.imgSeparador{
+			height: 500%;
+		}
+	</style>
+</head>
+
+<body>
+
+	
+	<button id="toggleButton">Minimizar</button>
+	<div id="controls-div">
+		<nav class="controls" id="controls-container">
+			<h2>Controles</h2>
+			<div id="container">
+				
+				<div id="selectContainer">
+					<div class="select">
+						<select id="materialSelect" name="format">
+							<option value="Material">Material</option>
+						</select>
+					</div>
+				</div>
+				<div id="selectContainer">
+					<div class="select">
+						<select id="formaSelect">
+							<option value="Forma">Forma</option>
+						</select>
+					</div>
+				</div>
+				<div id="selectContainer">
+					<div class="select">
+						<select id="indiceSelect">
+							<option value="Índice">Índice</option>
+						</select>
+					</div>
+				</div>
+				<div id="selectContainer">
+					<div class="select">
+						<select id="lwSelect">
+							<option value="L/W">L/W</option>
+						</select>
+					</div>
+				</div>
+				<div id="imageScrollContainer"></div>
+				<span id="selectedModel" hidden></span>
+			</div>
+		</nav>
+	</div>
+	
+	<div id="info-container" class="minimized">
+		<h4>Sobre este diseño</h4>
+		<p>Nombre: <span id="nombre"></span></p>
+		<p>Sobre el autor: <span id="sobreAutor"></span></p>
+		<p>Facetas: <span id="facetas"></span></p>
+		<p>Índice Refractivo: <span id="ri"></span></p>
+		<p>Índice: <span id="index"></span></p>
+        <p>L/W: <span id="lw"></span></p>
+		<p>P/W: <span id="pw"></span></p>
+		<p>C/W: <span id="cw"></span></p>
+		<button id="downloadASCButton">Descargar ASC</button>
+		<button id="downloadGLBButton">Descargar GLB</button>
+	</div>
+
+	<canvas id="webgi-canvas" class="backgroundCanvas"></canvas>
+
+
+
+
+	<script>
+		let materials = []
+		let gemData = [];
+
+		let designInfoCard = document.getElementById("info-container")
+		const formaSelect = document.getElementById("formaSelect");
+		const nombreSelect = document.getElementById("nombreSelect");
+		const indiceSelect = document.getElementById("indiceSelect");
+		const lwSelect = document.getElementById("lwSelect");
+		const imageScrollContainer = document.getElementById("imageScrollContainer");
+		const selectedImageSpan = document.getElementById("selectedModel");
+		const toggleButton = document.getElementById('toggleButton');
+		const controlsContainer = document.getElementById('controls-container');
+		let selectedImageName = "";
+		let isHeaderMinimized = false;
+
+
+		formaSelect.addEventListener("change", function () {
+			indiceSelect.value = "Índice";
+			lwSelect.value = "L/W";
+			filterData("forma")
+		});
+		indiceSelect.addEventListener("change", function () {
+			lwSelect.value = "L/W";
+			filterData("indice")
+		});
+		lwSelect.addEventListener("change", function () {
+			indiceSelect.value = "Índice";
+			filterData("lw")
+		});
+
+		document.getElementById('downloadASCButton').addEventListener('click', function() {
+			descargarArchivo('asc');
+		});
+
+		document.getElementById('downloadGLBButton').addEventListener('click', function() {
+			descargarArchivo('glb');
+		});
+
+		function descargarArchivo(extension) {
+			let model = document.getElementById("selectedModel").textContent
+			var enlace = document.createElement('a');
+			enlace.download = model+".asc";
+			enlace.target = "_blank";
+			(extension == "asc") ? enlace.href = "./ascFiles/"+model+".asc" : enlace.href = "https://raw.githubusercontent.com/Asdii/gemList/main/gems/"+model+".glb";
+			enlace.style.display = 'none';
+			document.body.appendChild(enlace);
+			enlace.click();
+		}
+
+		function loadFileList() {
+			const myHeaders = new Headers();
+			myHeaders.append('Content-Type','text/plain; charset=UTF-8');
+			fetch('https://raw.githubusercontent.com/Asdii/gemList/main/data.json', myHeaders)
+				.then(response => response.json())
+				.then(data => {
+					gemData = data;
+					populateFormas(data);
+				})
+				.catch(error => console.error('Error al cargar la lista de archivos:', error));
+		}
+
+		function populateFormas(data) {
+			formaSelect.innerHTML = '<option value="Forma">Forma</option>';
+			data.forEach(forma => {
+				const option = document.createElement('option');
+				option.value = Object.keys(forma);
+				option.textContent = Object.keys(forma);
+				formaSelect.appendChild(option);
+			});
+		}
+
+		function populateLw(data) {
+			lwSelect.innerHTML = '<option value="L/W">L/W</option>';
+			const lws = [...new Set(data.map(item => item["l/w"]))];
+			lws.forEach(lw => {
+				const option = document.createElement('option');
+				option.value = lw;
+				option.textContent = lw;
+				lwSelect.appendChild(option);
+			});
+		}
+
+		function populateIndices(data) {
+			indiceSelect.innerHTML = '<option value="Índice">Índice</option>';
+			const indices = [...new Set(data.map(item => item.index))];
+			indices.forEach(indice => {
+				const option = document.createElement('option');
+				option.value = indice;
+				option.textContent = indice;
+				indiceSelect.appendChild(option);
+			});
+		}
+
+		function populateImages(data) {
+			imageScrollContainer.innerHTML = '';
+			const nombres = [...new Set(data.map(item => item.nombre))];
+			data.forEach(item => {
+				const div = document.createElement('div')
+				const img = document.createElement('img');
+				const span = document.createElement('span');
+				const divSeparador = document.createElement('div')
+				const imgSeparador = document.createElement('img')
+				span.innerText = item.nombre
+				span.classList.add("spanNombre")
+				img.src = "https://raw.githubusercontent.com/Asdii/gemList/main/"+item.url_imagen;
+				img.alt = "https://raw.githubusercontent.com/Asdii/gemList/main/"+item.nombre;
+				img.addEventListener('click', () => {
+					selectedImageSpan.innerText = item.nombre
+					let event = new Event('click');
+					imageScrollContainer.dispatchEvent(event)
+				});
+				div.appendChild(img)
+				div.appendChild(span)
+				
+				div.classList.add("modelImageDiv")
+				divSeparador.classList.add("divider")
+				divSeparador.classList.add("line")
+				divSeparador.classList.add("double-razor")
+				imgSeparador.src = "assets/logo.png"
+				imgSeparador.classList.add("imgSeparador")
+				divSeparador.appendChild(imgSeparador)
+				imageScrollContainer.appendChild(div);
+				imageScrollContainer.appendChild(divSeparador);
+			});
+		}
+
+		let filteredData = []
+
+		function filterData(calledBy) {
+			const selectedForma = formaSelect.value;
+			const selectedIndice = indiceSelect.value;
+			const selectedLw = lwSelect.value;
+
+			filteredData = gemData;
+
+			if (selectedForma && selectedForma != "Forma") {
+				const formaData = gemData.find(entry => Object.keys(entry)[0] === selectedForma);
+				filteredData = formaData ? formaData[selectedForma] : [];
+			} else {
+				gemData.forEach(entry => {
+					const forma = Object.keys(entry)[0];
+					filteredData = filteredData.concat(entry[forma]);
+				});
+			}
+
+			if (selectedIndice && selectedIndice != "Índice") {
+				filteredData = filteredData.filter(item => item.index === selectedIndice);
+			}
+
+			if (selectedLw && selectedLw != "L/W") {
+				filteredData = filteredData.filter(item => item["l/w"] === selectedLw);
+			}
+			updateSelectOptions(filteredData, calledBy);
+		}
+
+		function updateSelectOptions(data, calledBy) {
+			if (calledBy != "indice") populateIndices(data);
+			if (calledBy != "lw") populateLw(data);
+			if (formaSelect.value != "Forma") populateImages(data);
+		}
+
+		window.onload = loadFileList;
+
+		document.addEventListener("DOMContentLoaded", function () {
+			fetch('https://raw.githubusercontent.com/Asdii/gemList/main/materials.json')
+				.then(response => response.json())
+				.then(data => {
+					materials = data.materials.material;
+					const selectElement = document.getElementById('materialSelect');
+
+					materials.forEach(material => {
+						const option = document.createElement('option');
+						option.value = material._name;
+						option.text = material._name;
+						selectElement.appendChild(option);
+					});
+				})
+				.catch(error => console.error('Error al cargar el JSON:', error))
+		});
+
+		toggleButton.addEventListener('click', () => {
+        if (isHeaderMinimized) {
+            controlsContainer.classList.remove('minimized');
+			designInfoCard.classList.remove('minimized')
+            toggleButton.textContent = 'Minimizar';
+        } else {
+            controlsContainer.classList.add('minimized');
+			designInfoCard.classList.add('minimized');
+            toggleButton.textContent = 'Controles';
+        }
+        isHeaderMinimized = !isHeaderMinimized;
+    });
+	</script>
+
+
+
+	<script src="src/index.ts" type="module"></script>
+</body>
+
+</html>
