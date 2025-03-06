@@ -3,7 +3,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import path from 'path'
 
 export default defineConfig({
-    base: "gemLibrary",
+    base: "/gemLibrary/",
     plugins: [
         viteStaticCopy({
             targets: [
