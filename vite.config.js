@@ -7,8 +7,8 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: normalizePath(path.resolve(__dirname, './assets') + '/[!.]*'), // 1️⃣
-                    dest: normalizePath('./assets'), // 2️⃣
+                    src: normalizePath(path.resolve(__dirname, './gemLibrary/assets') + '/[!.]*'), // 1️⃣
+                    dest: normalizePath('./gemLibrary/assets'), // 2️⃣
                 },
             ],
         }),
