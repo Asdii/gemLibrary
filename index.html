@@ -405,7 +405,7 @@
 			var enlace = document.createElement('a');
 			enlace.download = model+".asc";
 			enlace.target = "_blank";
-			(extension == "asc") ? enlace.href = "./ascFiles/"+model+".asc" : enlace.href = "https://raw.githubusercontent.com/Asdii/gemList/main/gems/"+model+".glb";
+			(extension == "asc") ? enlace.href = "https://raw.githubusercontent.com/Asdii/gemLibrary/main/ascFiles/"+model+".asc" : enlace.href = "https://raw.githubusercontent.com/Asdii/gemList/main/gems/"+model+".glb";
 			enlace.style.display = 'none';
 			document.body.appendChild(enlace);
 			enlace.click();
