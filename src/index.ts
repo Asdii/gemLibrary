@@ -87,7 +87,7 @@ async function setupViewer(){
     loadingScreen.minimizeOnSceneObjectLoad = true
     loadingScreen.hideOnSceneObjectLoad = true
     loadingScreen.showFileNames = false
-    loadingScreen.loadingTextHeader = "Cargando..."
+    loadingScreen.loadingTextHeader = "Loading..."
 
     const preset = new EnvironmentPresetGroup()
     viewer.scene.fixedEnvMapDirection = true

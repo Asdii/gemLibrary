@@ -302,10 +302,10 @@
 <body>
 
 	
-	<button id="toggleButton">Minimizar</button>
+	<button id="toggleButton">Minimize</button>
 	<div id="controls-div">
 		<nav class="controls" id="controls-container">
-			<h2>Controles</h2>
+			<h2>Settings</h2>
 			<div id="container">
 				
 				<div id="selectContainer">
@@ -318,14 +318,14 @@
 				<div id="selectContainer">
 					<div class="select">
 						<select id="formaSelect">
-							<option value="Forma">Forma</option>
+							<option value="Forma">Shape</option>
 						</select>
 					</div>
 				</div>
 				<div id="selectContainer">
 					<div class="select">
 						<select id="indiceSelect">
-							<option value="Índice">Índice</option>
+							<option value="Índice">Index</option>
 						</select>
 					</div>
 				</div>
@@ -343,23 +343,20 @@
 	</div>
 	
 	<div id="info-container" class="minimized">
-		<h4>Sobre este diseño</h4>
-		<p>Nombre: <span id="nombre"></span></p>
-		<p>Sobre el autor: <span id="sobreAutor"></span></p>
-		<p>Facetas: <span id="facetas"></span></p>
-		<p>Índice Refractivo: <span id="ri"></span></p>
-		<p>Índice: <span id="index"></span></p>
+		<h4>About this design</h4>
+		<p>Name: <span id="nombre"></span></p>
+		<p>Author: <span id="sobreAutor"></span></p>
+		<p>Facets: <span id="facetas"></span></p>
+		<p>RI: <span id="ri"></span></p>
+		<p>Index: <span id="index"></span></p>
         <p>L/W: <span id="lw"></span></p>
 		<p>P/W: <span id="pw"></span></p>
 		<p>C/W: <span id="cw"></span></p>
-		<button id="downloadASCButton">Descargar ASC</button>
-		<button id="downloadGLBButton">Descargar GLB</button>
+		<button id="downloadASCButton">Download ASC</button>
+		<button id="downloadGLBButton">Download GLB</button>
 	</div>
 
 	<canvas id="webgi-canvas" class="backgroundCanvas"></canvas>
-
-
-
 
 	<script>
 		let materials = []
@@ -393,6 +390,7 @@
 		});
 
 		document.getElementById('downloadASCButton').addEventListener('click', function() {
+			alert("Do right click -> Save page as... -> Use .asc as extension")
 			descargarArchivo('asc');
 		});
 
