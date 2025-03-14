@@ -42,10 +42,10 @@
     "fflate" "~0.6.9"
     "lil-gui" "~0.17.0"
 
-"@types/webgi@https://dist.pixotronics.com/webgi/runtime/bundle-types-0.10.4.tgz":
-  "integrity" "sha512-GxbEU+pIn3ziqQBJGZHhsyJHSuJiyLReg4jd4/1Suek/yxOE2OeZF2bW2l7yHyDheSgAsfak/bmXUsar9ZEXWw=="
-  "resolved" "https://dist.pixotronics.com/webgi/runtime/bundle-types-0.10.4.tgz"
-  "version" "0.10.4"
+"@types/webgi@https://storage.googleapis.com/dist.pixotronics.com/webgi/runtime/bundle-types-0.9.11.tgz":
+  "integrity" "sha512-6VXgAwp5K2JZ5DberaNDCsDryVhtpVl3IkND7MD8l/duqaeXDZ6XgckaPAgkYt1BnrMD76eXU/QqBb8j4NS+qw=="
+  "resolved" "https://storage.googleapis.com/dist.pixotronics.com/webgi/runtime/bundle-types-0.9.11.tgz"
+  "version" "0.9.11"
 
 "@types/webxr@^0.5.1":
   "integrity" "sha512-geZIAtLzjGmgY2JUi6VxXdCrTb99A7yP49lxLr2Nm/uIK0PkkxcEi4OGhoGDO4pxCf3JwGz2GiJL2Ej4K2bKaA=="
@@ -294,10 +294,10 @@
   dependencies:
     "is-number" "^7.0.0"
 
-"ts-browser-helpers@^0.16.0":
-  "integrity" "sha512-ClAmN+y1oVMIBQ6+gexw/BYd2RjegevC0XyoUSHK9r4fYtI3tPAglzXlTkyu0s/H3dLYZK5rs6Rcal9A1Rgq5g=="
-  "resolved" "https://registry.npmjs.org/ts-browser-helpers/-/ts-browser-helpers-0.16.3.tgz"
-  "version" "0.16.3"
+"ts-browser-helpers@^0.7.0":
+  "integrity" "sha512-QCqBNN4PUfe6OkmdWbpBLg9MFqQds3eMwFnIStHxDPdeqTUiAeuMwCK5UpWXTqdTWY/8OvDBQEAbnzeYRl4kCA=="
+  "resolved" "https://registry.npmjs.org/ts-browser-helpers/-/ts-browser-helpers-0.7.0.tgz"
+  "version" "0.7.0"
   dependencies:
     "@types/wicg-file-system-access" "^2020.9.5"
 
@@ -332,15 +332,15 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
-"webgi@https://dist.pixotronics.com/webgi/runtime/bundle-0.10.4.tgz":
-  "integrity" "sha512-nmi12Q83IuWAggzNlQKlfb/q1NiD40JjSIUG0es6VYtYCmZx0Pa/H03QBT3o74fDTsSACiXqVmA7kt7QzwtbfQ=="
-  "resolved" "https://dist.pixotronics.com/webgi/runtime/bundle-0.10.4.tgz"
-  "version" "0.10.4"
+"webgi@https://storage.googleapis.com/dist.pixotronics.com/webgi/runtime/bundle-0.9.11.tgz":
+  "integrity" "sha512-wVmhLi9je5L7ZUPcA6tsiyqGeSBnsVqn36BvQfT+FNKW8mgA4ArFlDBI05EjUdAWW3NmfGXE0vcyMyDRE6xZ0g=="
+  "resolved" "https://storage.googleapis.com/dist.pixotronics.com/webgi/runtime/bundle-0.9.11.tgz"
+  "version" "0.9.11"
   dependencies:
     "@types/three" "https://github.com/repalash/three-ts-types/releases/download/v0.153.1002/package.tgz"
     "@types/webxr" "^0.5.1"
     "@types/wicg-file-system-access" "^2020.9.5"
-    "ts-browser-helpers" "^0.16.0"
+    "ts-browser-helpers" "^0.7.0"
 
 "yarn@^1.22.22":
   "integrity" "sha512-prL3kGtyG7o9Z9Sv8IPfBNrWTDmXB4Qbes8A9rEzt6wkJV8mUvoirjU0Mp3GGAU06Y0XQyA3/2/RQFVuK7MTfg=="
