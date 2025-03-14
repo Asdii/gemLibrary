@@ -305,9 +305,18 @@
 	<button id="toggleButton">Minimize</button>
 	<div id="controls-div">
 		<nav class="controls" id="controls-container">
-			<h2>Settings</h2>
+			<h2>Render Settings</h2>
 			<div id="container">
-				
+				<div id="selectContainer">
+					<div class="select">
+						<select id="backgroundSetting">
+							<option value="Background">Background</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<h2>Design Settings</h2>
+			<div id="container">
 				<div id="selectContainer">
 					<div class="select">
 						<select id="materialSelect" name="format">
@@ -360,9 +369,12 @@
 
 	<script>
 		let materials = []
-		let gemData = [];
+		let gemData = []
+		let backgrounds = []
 
+		backgroundSetting
 		let designInfoCard = document.getElementById("info-container")
+		const backgroundSelect = document.getElementById("backgroundSetting");
 		const formaSelect = document.getElementById("formaSelect");
 		const nombreSelect = document.getElementById("nombreSelect");
 		const indiceSelect = document.getElementById("indiceSelect");
@@ -419,6 +431,16 @@
 					populateFormas(data);
 				})
 				.catch(error => console.error('Error al cargar la lista de archivos:', error));
+		}
+
+		function populateBackgrounds(data) {
+			backgroundSelect.innerHTML = '<option value="Background">Background</option>';
+			data.forEach(background => {
+				const option = document.createElement('option');
+				option.value = Object.keys(background);
+				option.textContent = Object.keys(background);
+				backgroundSelect.appendChild(option);
+			});
 		}
 
 		function populateFormas(data) {
@@ -527,6 +549,7 @@
 			fetch('https://raw.githubusercontent.com/Asdii/gemList/main/materials.json')
 				.then(response => response.json())
 				.then(data => {
+					console.log(data)
 					materials = data.materials.material;
 					const selectElement = document.getElementById('materialSelect');
 
@@ -537,7 +560,21 @@
 						selectElement.appendChild(option);
 					});
 				})
-				.catch(error => console.error('Error al cargar el JSON:', error))
+				.catch(error => console.error('Error al cargar el JSON de materiales:', error))
+
+			fetch('https://raw.githubusercontent.com/Asdii/gemList/main/backgrounds.json')
+				.then(response => response.json())
+				.then(data => {
+					backgrounds = data.backgrounds;
+
+					backgrounds.forEach(background => {
+						const option = document.createElement('option');
+						option.value = background._name;
+						option.text = background._name;
+						backgroundSelect.appendChild(option);
+					});
+				})
+				.catch(error => console.error('Error al cargar el JSON de backgrounds:', error))
 		});
 
 		toggleButton.addEventListener('click', () => {

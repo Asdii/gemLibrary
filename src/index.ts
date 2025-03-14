@@ -11,7 +11,6 @@ import {
     GroundPlugin,
     FrameFadePlugin,
     DiamondPlugin,
-    // DepthOfFieldPlugin,
     BufferGeometry,
     MeshStandardMaterial2,
     BloomPlugin, 
@@ -29,12 +28,15 @@ import {
     PresetGroup,
     BackgroundPresetGroup,
     EnvironmentPresetGroup,
-    LoadingScreenPlugin
+    LoadingScreenPlugin,
+    IViewerAppOptions,
+    DiamondMaterialParameters
 } from "webgi"
 import "./styles.css";
 
 async function setupViewer(){
 
+    let background = await document.getElementById("backgroundSetting")!
     let model = await document.getElementById("selectedModel")!
     let material = await document.getElementById("materialSelect")!
     let imageScrollContainer = await document.getElementById("imageScrollContainer")!
@@ -53,7 +55,8 @@ async function setupViewer(){
     const viewer = new ViewerApp({
         canvas,
         useGBufferDepth: true,
-        isAntialiased: false
+        isAntialiased: false,
+        useRgbm: true,
     })
 
     viewer.renderer.displayCanvasScaling = Math.min(window.devicePixelRatio, 1)
@@ -74,7 +77,7 @@ async function setupViewer(){
     await viewer.addPlugin(TemporalAAPlugin,)
     const diamondPlugin = await viewer.addPlugin(DiamondPlugin)
     //const dof = await viewer.addPlugin(DepthOfFieldPlugin)
-    await viewer.addPlugin(RandomizedDirectionalLightPlugin, false)
+    //await viewer.addPlugin(RandomizedDirectionalLightPlugin)
 
     ssr!.passes.ssr.passObject.lowQualityFrames = 0
     bloom.pass!.passObject.bloomIterations = 2
@@ -90,11 +93,6 @@ async function setupViewer(){
     loadingScreen.loadingTextHeader = "Loading..."
 
     const preset = new EnvironmentPresetGroup()
-    viewer.scene.fixedEnvMapDirection = true
-    
-    // First import the env map
-    const diamondEnvMap = await viewer.getManager()!.importer!.importSinglePath<ITexture&Texture>('https://demo-assets.pixotronics.com/pixo/hdr/gem_2.hdr')
-    diamondPlugin.envMap = diamondEnvMap!
 
     // if a separate envMap is specified it is also possible to set the envMapRotation
     diamondPlugin.envMapRotation = Math.PI / 2.0
@@ -139,6 +137,22 @@ async function setupViewer(){
         } 
     })
 
+
+
+    let currentBackground = ""
+    await background.addEventListener("change", async (event) => {
+        currentBackground = await event.target!.selectedOptions[0].textContent
+        await viewer.setBackgroundMap("./assets/"+currentBackground+".hdr");
+        await viewer.setEnvironmentMap("./assets/"+currentBackground+".hdr");
+
+        let diamondEnvMap = await viewer.getManager()!.importer!.importSinglePath<ITexture&Texture>("./assets/"+currentBackground+".hdr")
+        diamondPlugin.envMap2 = diamondEnvMap!
+
+        let brightDiamondEnvMap = await viewer.getManager()!.importer!.importSinglePath<ITexture&Texture>("./assets/artist_workshop_2k.hdr")
+        diamondPlugin.envMap = brightDiamondEnvMap!
+
+    })
+
     async function makeDiam(modelName: string, materialName:any){
         const o = await viewer.scene.findObjectsByName(modelName)[0];
 
@@ -151,11 +165,10 @@ async function setupViewer(){
         await diamondPlugin.makeDiamond(
             <IMaterial<any>>o.material,
             {normalMapRes: 256, cacheKey: o.name.split('_')[0].split('-')[1]},
-            {isDiamond: true, color: colorValue, refractiveIndex: riValue, dispersion:dispersionValue, envMapIntensity:2, reflectivity:0.2}
+            {rayBounces:5, squashFactor:1, gammaFactor:1, absorptionFactor:1, transmission:1, envMapIntensity:7,isDiamond: true, color: colorValue, refractiveIndex: riValue, dispersion:dispersionValue, reflectivity:0.1, diamondOrientedEnvMap:100}
         )
     }
-    await viewer.setBackgroundMap("./assets/je_gray_02_4k.hdr");
-    await viewer.setEnvironmentMap("./assets/je_gray_02_4k.hdr");
+
     viewer.scene.backgroundIntensity = 10
 }
 
